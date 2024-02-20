@@ -1,4 +1,4 @@
-![Soucerery-Engine Banner](banner.jpg)
+![Soucerery-Engine Banner](banner.png)
 
 # Soucerery-Engine
 
