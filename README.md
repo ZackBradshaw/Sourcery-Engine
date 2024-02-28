@@ -44,7 +44,7 @@ Check out the `/examples` directory for starter projects and tutorials on using 
 We welcome contributions from the community! Please see our contribution guidelines for more information on how you can become a part of the Soucerery-Engine project.
 
 ## License
-Specify the license under which the Soucerery-Engine is distributed.
+Soucerery-Engine is distributed under the MIT License. See the LICENSE file for more details.
 
 ## Community and Support
 Join us on Discord to meet the team and other developers using Soucerery-Engine: [Open-Soucerers Discord](https://discord.gg/WXV4vF7cza)
