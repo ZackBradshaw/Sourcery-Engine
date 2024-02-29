@@ -1,6 +1,6 @@
 ![Soucerery-Engine Banner](banner.png)
 
-# Soucerery-Engine
+# Soucery-Engine
 
 ## Overview
 Soucerery-Engine is a cutting-edge game engine built using Mojo, designed to revolutionize game development by integrating AI-driven content generation for text, images, 2D/3D graphics, and voice. This engine provides a robust platform for creating next-generation games, supporting programming in Python, Mojo, or Runes.
