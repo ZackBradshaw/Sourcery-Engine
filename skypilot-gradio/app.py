@@ -34,11 +34,11 @@ sky_pilot_interface = gr.Interface(
     inputs=[
         gr.Textbox(label="Model Path", placeholder="EleutherAI/gpt-neo-2.7B"),
         gr.Dropdown(label="GPU Type", choices=["V100", "P100", "T4"], value="V100"),
-        gr.Slider(label="CPUs", min_value=1, max_value=16, value=4),
-        gr.Slider(label="Memory (GB)", min_value=4, max_value=64, value=16),
+        gr.Slider(label="CPUs", minimum=1, maximum=16, value=4),
+        gr.Slider(label="Memory (GB)", minimum=4, maximum=64, value=16),
         gr.Dropdown(label="Cloud Provider", choices=["AWS", "GCP", "Azure"], value="AWS"),
         gr.Textbox(label="Region", placeholder="us-west-2"),
-        gr.Slider(label="Disk Size (GB)", min_value=20, max_value=1000, value=100),
+        gr.Slider(label="Disk Size (GB)", minimum=20, maximum=1000, value=100),
         gr.Dropdown(label="Disk Type", choices=["standard", "ssd"], value="ssd")
     ],
     outputs="text",
