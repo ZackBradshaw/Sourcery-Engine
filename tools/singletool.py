@@ -46,14 +46,14 @@ def import_all_apis(tool_json):
 
 
 def load_single_tools(tool_name, tool_url):
-    # tool_name, tool_url = "datasette", "https://datasette.io/"
-    # tool_name, tool_url = "klarna", "https://www.klarna.com/"
-    # tool_name, tool_url =  'chemical-prop',  "http://127.0.0.1:8079/tools/chemical-prop/"
-    # tool_name, tool_url =  'douban-film',  "http://127.0.0.1:8079/tools/douban-film/"
-    # tool_name, tool_url =  'weather',  "http://127.0.0.1:8079/tools/weather/"
-    # tool_name, tool_url =  'wikipedia',  "http://127.0.0.1:8079/tools/wikipedia/"
-    # tool_name, tool_url =  'wolframalpha',  "http://127.0.0.1:8079/tools/wolframalpha/"
-    # tool_name, tool_url =  'klarna',  "https://www.klarna.com/"
+    tool_name, tool_url = "datasette", "https://datasette.io/"
+    tool_name, tool_url = "klarna", "https://www.klarna.com/"
+    tool_name, tool_url =  'chemical-prop',  "http://127.0.0.1:8079/tools/chemical-prop/"
+    tool_name, tool_url =  'douban-film',  "http://127.0.0.1:8079/tools/douban-film/"
+    tool_name, tool_url =  'weather',  "http://127.0.0.1:8079/tools/weather/"
+    tool_name, tool_url =  'wikipedia',  "http://127.0.0.1:8079/tools/wikipedia/"
+    tool_name, tool_url =  'wolframalpha',  "http://127.0.0.1:8079/tools/wolframalpha/"
+    tool_name, tool_url =  'klarna',  "https://www.klarna.com/"
 
     get_url = tool_url + ".well-known/ai-plugin.json"
     response = requests.get(get_url)
@@ -86,9 +86,10 @@ class STQuestionAnswerer:
         if self.llm_model == "GPT-3.5":
             self.llm = OpenAI(temperature=0.0, openai_api_key=key)  # use text-darvinci
         elif self.llm_model == "ChatGPT":
+            base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com")
             self.llm = OpenAI(
-                model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key=key
-            )  # use chatgpt
+                model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key=key, base_url=base_url
+            )  # use chatgpt with optional base url imported through environment variable
         elif self.llm_model in available_models:
             self.llm = VLLM(model=f"models/{self.llm_model}")
         else:
