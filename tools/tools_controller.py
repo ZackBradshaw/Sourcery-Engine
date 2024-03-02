@@ -66,13 +66,14 @@ class MTQuestionAnswerer:
 
     def set_openai_api_key(self, key):
         logger.info("Using {}".format(self.llm_model))
+        base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com")
 
         if self.llm_model == "GPT-3.5":
-            self.llm = OpenAI(temperature=0.0, openai_api_key=key)  # use text-darvinci
+            self.llm = OpenAI(temperature=0.0, openai_api_key=key, base_url=base_url)  # use text-darvinci with optional base URL
         elif self.llm_model == "ChatGPT":
             self.llm = OpenAI(
-                model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key=key
-            )  # use chatgpt
+                model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key=key, base_url=base_url
+            )  # use chatgpt with optional base URL
         elif self.llm_model in available_models:  # If the selected model is a vLLM model
             self.llm = VLLM(model=f"models/{self.llm_model}")
         else:
