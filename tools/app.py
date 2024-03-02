@@ -24,8 +24,8 @@ with RequestBlocker():
 
 import matplotlib
 import gradio as gr
-from swarms.tools.tools_controller import MTQuestionAnswerer, load_valid_tools
-from swarms.tools.singletool import STQuestionAnswerer
+from sourcery-engine.tools.tools_controller import MTQuestionAnswerer, load_valid_tools
+from sourcery-engine.tools.singletool import STQuestionAnswerer
 from langchain.schema import AgentFinish
 import requests
 from tool_server import run_tool_server
