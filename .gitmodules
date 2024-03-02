@@ -4,3 +4,6 @@
 [submodule "vllm-gradio"]
 	path = vllm-gradio
 	url = https://github.com/ZackBradshaw/vllm-gradio
+[submodule "agent_tools"]
+	path = agent_tools
+	url = https://github.com/ZackBradshaw/agent_tools
