@@ -1,0 +1,6 @@
+[submodule "skypilot-gradio"]
+	path = skypilot-gradio
+	url = https://github.com/ZackBradshaw/skypilot-gradio
+[submodule "vllm-gradio"]
+	path = vllm-gradio
+	url = https://github.com/ZackBradshaw/vllm-gradio
