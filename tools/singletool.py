@@ -7,8 +7,8 @@ from vllm import LLM
 import yaml
 from apitool import RequestTool
 from executor import Executor 
-# from logger import get_logger
-from BabyagiTools import BabyAGI
+from logger import get_logger
+# from BabyagiTools import BabyAGI
 from langchain.llms import VLLM
 # from .models.customllm import CustomLLM
 
