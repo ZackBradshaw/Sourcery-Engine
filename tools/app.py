@@ -1,5 +1,3 @@
-import sky
-import boto3
 from transformers import AutoTokenizer
 from botocore.exceptions import NoCredentialsError
 import tokenize
@@ -22,7 +20,7 @@ warnings.filterwarnings('ignore', category=UserWarning, message='Field "model_na
 import matplotlib
 import gradio as gr
 from tools_controller import MTQuestionAnswerer, load_valid_tools
-from .singletool import STQuestionAnswerer
+from singletool import STQuestionAnswerer
 from langchain.schema import AgentFinish
 import requests
 from tool_server import run_tool_server
@@ -322,10 +320,6 @@ def deploy_on_sky_pilot(model_name: str, tokenizer: str, accelerators: str):
 
     # Launch the task on SkyPilot
     sky.launch(task,cluster_name=cluster_name)
-
-# Add this line where you define your Gradio interface
-
-title = 'Swarm Models'
 
 # css/js strings
 css = ui.css
