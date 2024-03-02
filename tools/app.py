@@ -1,5 +1,5 @@
-import sky
-import boto3
+# import sky
+# import boto3
 from transformers import AutoTokenizer
 from botocore.exceptions import NoCredentialsError
 import tokenize
@@ -340,27 +340,27 @@ def fetch_tokenizer(model_name):
         return f"Error loading tokenizer: {str(e)}"
 
 # Add this function to handle the button click
-import sky
+# import sky
 
-def deploy_on_sky_pilot(model_name: str, tokenizer: str, accelerators: str):
-    # Create a SkyPilot Task
-    #TODO have ai generate a yaml file for the configuration the user desires add this as a tool 
-    task = sky.Task(
-        setup="conda create -n vllm python=3.9 -y\nconda activate vllm\ngit clone https://github.com/vllm-project/vllm.git\ncd vllm\npip install .\npip install gradio",
-        run="conda activate vllm\necho 'Starting vllm api server...'\npython -u -m vllm.entrypoints.api_server --model $MODEL_NAME --tensor-parallel-size $SKYPILOT_NUM_GPUS_PER_NODE --tokenizer $TOKENIZER 2>&1 | tee api_server.log &\necho 'Waiting for vllm api server to start...'\nwhile ! `cat api_server.log | grep -q 'Uvicorn running on'`; do sleep 1; done\necho 'Starting gradio server...'\npython vllm/examples/gradio_webserver.py",
-        envs={
-            "MODEL_NAME": model_name,
-            "TOKENIZER": AutoTokenizer.from_pretrained(model_name)
-        },
-        resources={
-            "accelerators": accelerators
-        }
-    )
+# def deploy_on_sky_pilot(model_name: str, tokenizer: str, accelerators: str):
+#     # Create a SkyPilot Task
+#     #TODO have ai generate a yaml file for the configuration the user desires add this as a tool 
+#     task = sky.Task(
+#         setup="conda create -n vllm python=3.9 -y\nconda activate vllm\ngit clone https://github.com/vllm-project/vllm.git\ncd vllm\npip install .\npip install gradio",
+#         run="conda activate vllm\necho 'Starting vllm api server...'\npython -u -m vllm.entrypoints.api_server --model $MODEL_NAME --tensor-parallel-size $SKYPILOT_NUM_GPUS_PER_NODE --tokenizer $TOKENIZER 2>&1 | tee api_server.log &\necho 'Waiting for vllm api server to start...'\nwhile ! `cat api_server.log | grep -q 'Uvicorn running on'`; do sleep 1; done\necho 'Starting gradio server...'\npython vllm/examples/gradio_webserver.py",
+#         envs={
+#             "MODEL_NAME": model_name,
+#             "TOKENIZER": AutoTokenizer.from_pretrained(model_name)
+#         },
+#         resources={
+#             "accelerators": accelerators
+#         }
+#     )
 
-    # Launch the task on SkyPilot
-    sky.launch(task,cluster_name=cluster_name)
+#     # Launch the task on SkyPilot
+#     sky.launch(task,cluster_name=cluster_name)
 
-# Add this line where you define your Gradio interface
+# # Add this line where you define your Gradio interface
 
 title = 'Swarm Models'
 
