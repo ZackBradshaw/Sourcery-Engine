@@ -74,10 +74,6 @@ class MTQuestionAnswerer:
             self.llm = OpenAI(
                 model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key=key, base_url=openai_base_url
             )  # use chatgpt
-        elif self.llm_model in available_models:  # If the selected model is a vLLM model
-            self.llm = VLLM(model=f"models/{self.llm_model}")
-        else:
-            raise RuntimeError("Your model is not available.")
 
     def load_tools(self, all_tools):
         logger.info("All tools: {}".format(all_tools))
@@ -127,7 +123,7 @@ class MTQuestionAnswerer:
         )
 
         # TODO refactor to use the flow
-        from swarms.tools.agent.autogptmulti.agent import AutoGPT
+        from agent.autogptmulti.agent import AutoGPT
         from langchain.chat_models import ChatOpenAI
 
         agent_executor = AutoGPT.from_llm_and_tools(
@@ -171,7 +167,7 @@ if __name__ == "__main__":
 
     tools = load_valid_tools(tools_mappings)
 
-    qa = MTQuestionAnswerer(openai_api_key="", all_tools=tools)
+    qa = MTQuestionAnswerer(openai_api_key="sk-1234567890", all_tools=tools)
 
     agent = qa.build_runner()
 
