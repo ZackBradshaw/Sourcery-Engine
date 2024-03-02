@@ -108,25 +108,10 @@ return_msg = []
 chat_history = ""
 
 MAX_SLEEP_TIME = 40
-
-def download_model(model_url: str, memory_utilization: int , model_dir: str):
-    model_name = model_url.split('/')[-1]
-    # Download the model using VLLM
-    vllm_model = VLLM(
-        model=model_url,
-        trust_remote_code=True,
-        gpu_memory_utilization=memory_utilization,
-        download_dir=model_dir
-    )
-    # Add the downloaded model to the available_models list
-    available_models.append((model_name, vllm_model))
-    # Update the dropdown choices with the new available_models list
-    model_chosen.update(choices=available_models)
-
 valid_tools_info = {}
 
 import gradio as gr
-from swarms.tools.tools_controller import load_valid_tools, tools_mappings
+from tools_controller import load_valid_tools, tools_mappings
 
 def load_tools():
     global valid_tools_info
@@ -140,14 +125,6 @@ def load_tools():
     print(f"all_tools_list: {all_tools_list}")  # Debugging line
     return gr.update(choices=all_tools_list)
 
-def start_sky_pilot(cluster_name: str):
-    sky.start(cluster_name)
-
-def stop_sky_pilot(cluster_name: str):
-    sky.stop(cluster_name)
-
-def status_sky_pilot(cluster_name: str):
-    return sky.status(cluster_name)
 def set_environ(OPENAI_API_KEY: str = "",
                 WOLFRAMALPH_APP_ID: str = "",
                 WEATHER_API_KEYS: str = "",
@@ -216,16 +193,17 @@ def answer_by_tools(question, tools_chosen, model_chosen):
     return_msg += [(question, None), (None, '...')]
     yield [gr.update(visible=True, value=return_msg), gr.update(), gr.update()]
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+    OPENAI_BASE_URL = os.environ.get('OPENAI_BASE_URL', 'https://api.openai.com')
 
     if len(tools_chosen) == 0:  # if there is no tools chosen, we use all todo (TODO: What if the pool is too large.)
         tools_chosen = list(valid_tools_info.keys())
 
     if len(tools_chosen) == 1:
-        answerer = STQuestionAnswerer(OPENAI_API_KEY.strip(), stream_output=True, llm=model_chosen)
+        answerer = STQuestionAnswerer(OPENAI_API_KEY.strip(), OPENAI_BASE_URL, stream_output=True, llm=model_chosen)
         agent_executor = answerer.load_tools(tools_chosen[0], valid_tools_info[tools_chosen[0]],
                                              prompt_type="react-with-tool-description", return_intermediate_steps=True)
     else:
-        answerer = MTQuestionAnswerer(OPENAI_API_KEY.strip(),
+        answerer = MTQuestionAnswerer(OPENAI_API_KEY.strip(), OPENAI_BASE_URL,
                                       load_valid_tools({k: tools_mappings[k] for k in tools_chosen}),
                                       stream_output=True, llm=model_chosen)
 
@@ -332,8 +310,6 @@ with gr.Blocks() as demo:
         with gr.Row():
             with gr.Column(scale=14):
                 gr.Markdown("")
-            with gr.Column(scale=1):
-                gr.Image(show_label=False, show_download_button=False, value="images/swarmslogobanner.png")
 
         with gr.Tab("Key setting"):
             OPENAI_API_KEY = gr.Textbox(label="OpenAI API KEY:", placeholder="sk-...", type="text")
@@ -376,34 +352,6 @@ with gr.Blocks() as demo:
 
                 with gr.Column(scale=4):
                     with gr.Row():
-                        with gr.Column(scale=1):
-                            model_url = gr.Textbox(label="VLLM Model URL:", placeholder="URL to download VLLM model from Hugging Face", type="text");
-                            buttonDownload = gr.Button("Download Model");
-                            buttonDownload.click(fn=download_model, inputs=[model_url, memory_utilization]);
-                            model_chosen = gr.Dropdown(
-                                list(available_models),
-                                value=DEFAULTMODEL,
-                                multiselect=False,
-                                label="Model provided",
-                                info="Choose the model to solve your question, Default means ChatGPT."
-                            )
-                            tokenizer_output = gr.outputs.Textbox(label="Tokenizer")
-                            cluster_name = gr.outputs.Textbox(label="Cluster")
-                            model_chosen.change(fetch_tokenizer, outputs=tokenizer_output)
-                            available_accelerators = ["A100", "V100", "P100", "K80", "T4", "P4"]
-                            accelerators = gr.Dropdown(available_accelerators, label="Accelerators:")
-                            buttonDeploy = gr.Button("Deploy on SkyPilot")
-
-                            buttonDeploy.click(deploy_on_sky_pilot, [model_chosen, tokenizer_output, accelerators, HUGGINGFACE_API_KEY])
-                            buttonStart = gr.Button("Start SkyPilot")
-                            buttonStart.click(start_sky_pilot, [cluster_name])
-
-                            buttonStop = gr.Button("Stop SkyPilot")
-                            buttonStop.click(stop_sky_pilot, [cluster_name])
-
-                            buttonStatus = gr.Button("Check SkyPilot Status")
-                            buttonStatus.click(status_sky_pilot, [cluster_name])
-                    with gr.Row():
                         tools_search = gr.Textbox(
                             lines=1,
                             label="Tools Search",
@@ -416,13 +364,6 @@ with gr.Blocks() as demo:
                         label="Tools provided",
                         info="Choose the tools to solve your question.",
                     )
-
-
-            # TODO finish integrating model flow
-            # with gr.Tab("model"):
-            #     create_inferance();
-            #     def serve_iframe():
-            #         return f'hi'
 
             # TODO fix webgl galaxy backgroun
             # def serve_iframe():
@@ -462,6 +403,5 @@ with gr.Blocks() as demo:
 
 # demo.queue().launch(share=False, inbrowser=True, server_name="127.0.0.1", server_port=7001)
 demo.queue().launch()
-
 
 

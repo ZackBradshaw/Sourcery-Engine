@@ -32,7 +32,7 @@ class ToolScope(Enum):
 SessionGetter = Callable[[], Tuple[str, AgentExecutor]]
 
 openai_api_key = os.environ["OPENAI_API_KEY"]
-base_url = os.getenv("BASE_URL", "")  # Optionally use base URL from env
+base_url = os.getenv("OPENAI_BASE_URL", "")  # Optionally use base URL from env
 llm = ChatOpenAI(model_name="gpt-4", temperature=1.0, openai_api_key=openai_api_key, base_url=base_url)
 
 

@@ -10,7 +10,7 @@ from vllm import LLM
 import yaml
 from apitool import RequestTool
 from executor import Executor, AgentExecutorWithTranslation
-from swarms.utils import get_logger
+from logger import get_logger
 from BabyagiTools import BabyAGI
 from langchain.llms import VLLM
 # from .models.customllm import CustomLLM
@@ -90,10 +90,6 @@ class STQuestionAnswerer:
             self.llm = OpenAI(
                 model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key=key, base_url=base_url
             )  # use chatgpt with optional base url imported through environment variable
-        elif self.llm_model in available_models:
-            self.llm = VLLM(model=f"models/{self.llm_model}")
-        else:
-            raise RuntimeError("Your model is not available.")
 
     def load_tools(
         self,
@@ -210,7 +206,7 @@ class STQuestionAnswerer:
             )
 
             # TODO refactor to use the flow class
-            from swarms.tools.agent.autogpt.agent import AutoGPT
+            from agent.autogpt.agent import AutoGPT
             from langchain.chat_models import ChatOpenAI
             from langchain.schema import (
                 AIMessage,
