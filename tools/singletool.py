@@ -8,10 +8,10 @@ import os
 import requests
 from vllm import LLM
 import yaml
-from .apitool import RequestTool
-from .executor import Executor, AgentExecutorWithTranslation
+from apitool import RequestTool
+from executor import Executor, AgentExecutorWithTranslation
 from swarms.utils import get_logger
-from .BabyagiTools import BabyAGI
+from BabyagiTools import BabyAGI
 from langchain.llms import VLLM
 # from .models.customllm import CustomLLM
 
