@@ -1,5 +1,5 @@
-# import sky
-# import boto3
+import sky
+import boto3
 from transformers import AutoTokenizer
 from botocore.exceptions import NoCredentialsError
 import tokenize
@@ -11,11 +11,6 @@ from pathlib import Path
 from threading import Lock
 import warnings
 import json
-
-from swarms.modelui.modules.block_requests import OpenMonkeyPatch, RequestBlocker
-from swarms.modelui.modules.logging_colors import logger
-from swarms.modelui.server import create_interface
-
 from vllm import LLM 
 
 os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'
@@ -28,51 +23,22 @@ with RequestBlocker():
     import gradio as gr
 
 import matplotlib
-
-matplotlib.use('Agg')  # This fixes LaTeX rendering on some systems
-
-import swarms.modelui.modules.extensions as extensions_module
-from swarms.modelui.modules import (
-    chat,
-    shared,
-    training,
-    ui,
-    ui_chat,
-    ui_default,
-    ui_file_saving,
-    ui_model_menu,
-    ui_notebook,
-    ui_parameters,
-    ui_session,
-    utils
-)
-from swarms.modelui.modules.extensions import apply_extensions
-from swarms.modelui.modules.LoRA import add_lora_to_model
-from swarms.modelui.modules.models import load_model
-from swarms.modelui.modules.models_settings import (
-    get_fallback_settings,
-    get_model_metadata,
-    update_model_parameters
-)
-from swarms.modelui.modules.utils import gradio
-
 import gradio as gr
 from swarms.tools.tools_controller import MTQuestionAnswerer, load_valid_tools
 from swarms.tools.singletool import STQuestionAnswerer
 from langchain.schema import AgentFinish
 import requests
-
-from swarms.modelui.server import create_interface
 from tool_server import run_tool_server
 from threading import Thread
 from multiprocessing import Process
 import time
 from langchain.llms import VLLM
-
 import yaml
 
+matplotlib.use('Agg')  # This fixes LaTeX rendering on some systems
 
 tool_server_flag = False
+
 def start_tool_server():
     # server = Thread(target=run_tool_server)
     server = Process(target=run_tool_server)
@@ -125,7 +91,7 @@ tools_mappings = {
     "walmart": "http://127.0.0.1:8079/tools/walmart",
 }
 
-# data = json.load(open('swarms/tools/openai.json')) # Load the JSON file
+# data = json.load(open('sourcery-engine/tools/openai.json')) # Load the JSON file
 # items = data['items'] # Get the list of items
 
 # for plugin in items: # Iterate over items, not data
@@ -340,27 +306,27 @@ def fetch_tokenizer(model_name):
         return f"Error loading tokenizer: {str(e)}"
 
 # Add this function to handle the button click
-# import sky
+import sky
 
-# def deploy_on_sky_pilot(model_name: str, tokenizer: str, accelerators: str):
-#     # Create a SkyPilot Task
-#     #TODO have ai generate a yaml file for the configuration the user desires add this as a tool 
-#     task = sky.Task(
-#         setup="conda create -n vllm python=3.9 -y\nconda activate vllm\ngit clone https://github.com/vllm-project/vllm.git\ncd vllm\npip install .\npip install gradio",
-#         run="conda activate vllm\necho 'Starting vllm api server...'\npython -u -m vllm.entrypoints.api_server --model $MODEL_NAME --tensor-parallel-size $SKYPILOT_NUM_GPUS_PER_NODE --tokenizer $TOKENIZER 2>&1 | tee api_server.log &\necho 'Waiting for vllm api server to start...'\nwhile ! `cat api_server.log | grep -q 'Uvicorn running on'`; do sleep 1; done\necho 'Starting gradio server...'\npython vllm/examples/gradio_webserver.py",
-#         envs={
-#             "MODEL_NAME": model_name,
-#             "TOKENIZER": AutoTokenizer.from_pretrained(model_name)
-#         },
-#         resources={
-#             "accelerators": accelerators
-#         }
-#     )
+def deploy_on_sky_pilot(model_name: str, tokenizer: str, accelerators: str):
+    # Create a SkyPilot Task
+    #TODO have ai generate a yaml file for the configuration the user desires add this as a tool 
+    task = sky.Task(
+        setup="conda create -n vllm python=3.9 -y\nconda activate vllm\ngit clone https://github.com/vllm-project/vllm.git\ncd vllm\npip install .\npip install gradio",
+        run="conda activate vllm\necho 'Starting vllm api server...'\npython -u -m vllm.entrypoints.api_server --model $MODEL_NAME --tensor-parallel-size $SKYPILOT_NUM_GPUS_PER_NODE --tokenizer $TOKENIZER 2>&1 | tee api_server.log &\necho 'Waiting for vllm api server to start...'\nwhile ! `cat api_server.log | grep -q 'Uvicorn running on'`; do sleep 1; done\necho 'Starting gradio server...'\npython vllm/examples/gradio_webserver.py",
+        envs={
+            "MODEL_NAME": model_name,
+            "TOKENIZER": AutoTokenizer.from_pretrained(model_name)
+        },
+        resources={
+            "accelerators": accelerators
+        }
+    )
 
-#     # Launch the task on SkyPilot
-#     sky.launch(task,cluster_name=cluster_name)
+    # Launch the task on SkyPilot
+    sky.launch(task,cluster_name=cluster_name)
 
-# # Add this line where you define your Gradio interface
+# Add this line where you define your Gradio interface
 
 title = 'Swarm Models'
 
