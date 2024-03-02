@@ -13,7 +13,7 @@ from langchain.vectorstores import FAISS
 import faiss
 from langchain.docstore import InMemoryDocstore
 from langchain.agents import ZeroShotAgent, Tool, AgentExecutor
-from .executor import Executor, AgentExecutorWithTranslation
+from executor import Executor
 
 
 class ContextAwareAgent(ZeroShotAgent):

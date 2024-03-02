@@ -4,29 +4,29 @@ from typing import Any, Dict, List, Tuple, Union
 from langchain.agents import AgentExecutor
 from langchain.input import get_color_mapping
 from langchain.schema import AgentAction, AgentFinish
-from translator import Translator
+# from translator import Translator
 
 
-class AgentExecutorWithTranslation(AgentExecutor):
-    translator: Translator = Translator()
+# class AgentExecutorWithTranslation(AgentExecutor):
+#     translator: Translator = Translator()
 
-    def prep_outputs(
-        self,
-        inputs: Dict[str, str],
-        outputs: Dict[str, str],
-        return_only_outputs: bool = False,
-    ) -> Dict[str, str]:
-        try:
-            outputs = super().prep_outputs(inputs, outputs, return_only_outputs)
-        except ValueError as e:
-            return outputs
-        else:
-            if "input" in outputs:
-                outputs = self.translator(outputs)
-            return outputs
+#     def prep_outputs(
+#         self,
+#         inputs: Dict[str, str],
+#         outputs: Dict[str, str],
+#         return_only_outputs: bool = False,
+#     ) -> Dict[str, str]:
+#         try:
+#             outputs = super().prep_outputs(inputs, outputs, return_only_outputs)
+#         except ValueError as e:
+#             return outputs
+#         else:
+#             if "input" in outputs:
+#                 outputs = self.translator(outputs)
+#             return outputs
 
 
-class Executor(AgentExecutorWithTranslation):
+class Executor():
     def _call(self, inputs: Dict[str, str]) -> Dict[str, Any]:
         """Run text through and get agent response."""
         # Construct a mapping of tool name to tool for easy lookup
