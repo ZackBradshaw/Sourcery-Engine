@@ -1,3 +1,9 @@
+---
+title: Tools
+app_file: app.py
+sdk: gradio
+sdk_version: 4.19.2
+---
 Here are 20 tools the individual worker swarm nodes can use:
 
 1. Write File Tool: Create a new file and write content to it.

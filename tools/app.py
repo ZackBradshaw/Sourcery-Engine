@@ -375,6 +375,6 @@ with gr.Blocks() as demo:
         buttonClear.click(clear_history, [], chatbot)
 
 # demo.queue().launch(share=False, inbrowser=True, server_name="127.0.0.1", server_port=7001)
-demo.queue().launch()
+demo.queue().launch(share=True)
 
 
