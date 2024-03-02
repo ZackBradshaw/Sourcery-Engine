@@ -19,13 +19,10 @@ warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is
 warnings.filterwarnings('ignore', category=UserWarning, message='Using the update method is deprecated')
 warnings.filterwarnings('ignore', category=UserWarning, message='Field "model_name" has conflict')
 
-with RequestBlocker():
-    import gradio as gr
-
 import matplotlib
 import gradio as gr
-from sourcery-engine.tools.tools_controller import MTQuestionAnswerer, load_valid_tools
-from sourcery-engine.tools.singletool import STQuestionAnswerer
+from tools_controller import MTQuestionAnswerer, load_valid_tools
+from .singletool import STQuestionAnswerer
 from langchain.schema import AgentFinish
 import requests
 from tool_server import run_tool_server
