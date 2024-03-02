@@ -1,4 +1,0 @@
-
-gradio==2.3.7
-requests==2.25.1
-sky
