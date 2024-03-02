@@ -1,4 +1,4 @@
-from swarms.tools.serve import ToolServer
+from tools.serve import ToolServer
 
 
 def run_tool_server():
