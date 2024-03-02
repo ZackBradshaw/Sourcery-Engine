@@ -50,3 +50,4 @@ vllm==0.3.2
 xmltodict==0.13.0
 py3langid
 iso639
+languages
