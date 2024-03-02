@@ -1,7 +1,7 @@
 import fastapi
 import uvicorn
-from .registry import build_tool, list_tools
-from .retriever import Retriever
+from registry import build_tool, list_tools
+from retriever import Retriever
 from typing import List, Dict
 from pydantic import BaseModel
 

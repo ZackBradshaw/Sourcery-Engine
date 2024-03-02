@@ -8,9 +8,9 @@ import requests
 import yaml
 from apitool import Tool
 from singletool import STQuestionAnswerer
-from executor import Executor, AgentExecutorWithTranslation
+from executor import Executor
 from vllm import LLM 
-from tools import get_logger
+from tool_logging import get_logger
 from pathlib import Path
 from langchain.llms import VLLM
 import json
@@ -47,9 +47,7 @@ def load_valid_tools(tools_mappings):
     return tools_to_config
 
 
-# Read the model/ directory and get the list of models
-model_dir = Path("./models/")
-available_models = ["ChatGPT", "GPT-3.5"] + [f.name for f in model_dir.iterdir() if f.is_dir()]
+available_models = ["ChatGPT", "GPT-3.5"]
 
 class MTQuestionAnswerer:
     """Use multiple tools to answer a question. Basically pass a natural question to"""
@@ -60,7 +58,6 @@ class MTQuestionAnswerer:
         self.openai_api_key = openai_api_key
         self.stream_output = stream_output
         self.llm_model = llm
-        self.model = model_path
         self.set_openai_api_key(openai_api_key)
         self.load_tools(all_tools)
 

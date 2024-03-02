@@ -45,8 +45,7 @@ def start_tool_server():
 DEFAULTMODEL = "ChatGPT"  # "GPT-3.5"
 
 # Read the model/ directory and get the list of models
-model_dir = Path("./models/")
-available_models = ["ChatGPT", "GPT-3.5", "decapoda-research/llama-13b-hf"] + [f.name for f in model_dir.iterdir() if f.is_dir()]
+available_models = ["ChatGPT", "GPT-3.5"]
 
 tools_mappings = {
     "klarna": "https://www.klarna.com/",
@@ -281,30 +280,6 @@ def fetch_tokenizer(model_name):
 # Add this function to handle the button click
 import sky
 
-def deploy_on_sky_pilot(model_name: str, tokenizer: str, accelerators: str):
-    # Create a SkyPilot Task
-    #TODO have ai generate a yaml file for the configuration the user desires add this as a tool 
-    task = sky.Task(
-        setup="conda create -n vllm python=3.9 -y\nconda activate vllm\ngit clone https://github.com/vllm-project/vllm.git\ncd vllm\npip install .\npip install gradio",
-        run="conda activate vllm\necho 'Starting vllm api server...'\npython -u -m vllm.entrypoints.api_server --model $MODEL_NAME --tensor-parallel-size $SKYPILOT_NUM_GPUS_PER_NODE --tokenizer $TOKENIZER 2>&1 | tee api_server.log &\necho 'Waiting for vllm api server to start...'\nwhile ! `cat api_server.log | grep -q 'Uvicorn running on'`; do sleep 1; done\necho 'Starting gradio server...'\npython vllm/examples/gradio_webserver.py",
-        envs={
-            "MODEL_NAME": model_name,
-            "TOKENIZER": AutoTokenizer.from_pretrained(model_name)
-        },
-        resources={
-            "accelerators": accelerators
-        }
-    )
-
-    # Launch the task on SkyPilot
-    sky.launch(task,cluster_name=cluster_name)
-
-# css/js strings
-css = ui.css
-js = ui.js
-css += apply_extensions('css')
-js += apply_extensions('js')
-
 # with gr.Blocks(css=css, analytics_enabled=False, title=title, theme=ui.theme) as demo:
 with gr.Blocks() as demo:
         with gr.Row():
@@ -340,13 +315,11 @@ with gr.Blocks() as demo:
                     with gr.Row():
                         with gr.Column(scale=0.85):
                             txt = gr.Textbox(show_label=False, placeholder="Question here. Use Shift+Enter to add new line.",
-                                            lines=1).style(container=False)
+                                            lines=1)
                         with gr.Column(scale=0.15, min_width=0):
                             buttonChat = gr.Button("Chat")
 
-                    memory_utilization = gr.Slider(label="Memory Utilization:", min=0, max=1, step=0.1, default=0.5)
-                    
-                    chatbot = gr.Chatbot(show_label=False, visible=True).style(height=600)
+                    chatbot = gr.Chatbot(show_label=False, visible=True)
                     buttonClear = gr.Button("Clear History")
                     buttonStop = gr.Button("Stop", visible=False)
 
@@ -395,8 +368,8 @@ with gr.Blocks() as demo:
 
         txt.submit(lambda: [gr.update(value=''), gr.update(visible=False), gr.update(visible=True)], [],
                 [txt, buttonClear, buttonStop])
-        inference_event = txt.submit(answer_by_tools, [txt, tools_chosen, model_chosen], [chatbot, buttonClear, buttonStop])
-        buttonChat.click(answer_by_tools, [txt, tools_chosen, model_chosen], [chatbot, buttonClear, buttonStop])
+        inference_event = txt.submit(answer_by_tools, [txt, tools_chosen], [chatbot, buttonClear, buttonStop])
+        buttonChat.click(answer_by_tools, [txt, tools_chosen], [chatbot, buttonClear, buttonStop])
         buttonStop.click(lambda: [gr.update(visible=True), gr.update(visible=False)], [], [buttonClear, buttonStop],
                         cancels=[inference_event])
         buttonClear.click(clear_history, [], chatbot)

@@ -7,7 +7,7 @@ from vllm import LLM
 import yaml
 from apitool import RequestTool
 from executor import Executor 
-from logger import get_logger
+from tool_logging import get_logger
 # from BabyagiTools import BabyAGI
 from langchain.llms import VLLM
 # from .models.customllm import CustomLLM
@@ -63,8 +63,9 @@ def load_single_tools(tool_name, tool_url):
     return tool_name, tool_config_json
 
 # Read the model/ directory and get the list of models
-model_dir = Path("./models/")
-available_models = ["ChatGPT", "GPT-3.5"] + [f.name for f in model_dir.iterdir() if f.is_dir()]
+# model_dir = Path("./models/")
+available_models = ["ChatGPT", "GPT-3.5"] 
+# + [f.name for f in model_dir.iterdir() if f.is_dir()]
 
 class STQuestionAnswerer:
     def __init__(self, openai_api_key="", stream_output=False, llm="ChatGPT"):

@@ -1,4 +1,4 @@
-from tools.serve import ToolServer
+from serve import ToolServer
 
 
 def run_tool_server():

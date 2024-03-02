@@ -1,4 +1,4 @@
-from .tool import Tool
+from tool import Tool
 from typing import Dict, Callable, Any, List
 
 ToolBuilder = Callable[[Any], Tool]
