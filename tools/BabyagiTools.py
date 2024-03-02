@@ -170,7 +170,6 @@ def execute_task(
     context = _get_top_tasks(vectorstore, query=objective, k=k)
     return execution_chain.run(objective=objective, context=context, task=task)
 
-
 class BabyAGI(Chain, BaseModel):
     """Controller model for the BabyAGI agent."""
 
