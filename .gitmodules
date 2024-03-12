@@ -10,3 +10,6 @@
 [submodule "Chat-nFace"]
 	path = Chat-nFace
 	url = https://github.com/ZackBradshaw/Chat-nFace
+[submodule "frontend/Proxmox/text-generation-webui"]
+	path = frontend/Proxmox/text-generation-webui
+	url = https://github.com/ZackBradshaw/text-generation-webui
