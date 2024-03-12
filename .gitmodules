@@ -13,3 +13,6 @@
 [submodule "frontend/Proxmox/text-generation-webui"]
 	path = frontend/Proxmox/text-generation-webui
 	url = https://github.com/ZackBradshaw/text-generation-webui
+[submodule "text-generation-webui"]
+	path = text-generation-webui
+	url = https://github.com/ZackBradshaw/text-generation-webui
