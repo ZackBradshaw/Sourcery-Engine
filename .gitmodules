@@ -7,3 +7,6 @@
 [submodule "agent_tools"]
 	path = agent_tools
 	url = https://github.com/ZackBradshaw/agent_tools
+[submodule "Chat-nFace"]
+	path = Chat-nFace
+	url = https://github.com/ZackBradshaw/Chat-nFace
