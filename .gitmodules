@@ -16,3 +16,6 @@
 [submodule "text-generation-webui"]
 	path = text-generation-webui
 	url = https://github.com/ZackBradshaw/text-generation-webui
+[submodule "skypilot"]
+	path = skypilot
+	url = https://github.com/ZackBradshaw/skypilot
