@@ -19,3 +19,6 @@
 [submodule "skypilot"]
 	path = skypilot
 	url = https://github.com/ZackBradshaw/skypilot
+[submodule "swarm_interface"]
+	path = swarm_interface
+	url = https://github.com/ZackBradshaw/swarm_interface
